@@ -1,0 +1,53 @@
+<div class="cartridge-row-body cartridge-row-alignment">
+<div class="col-sm-12 col-md-12 tree-node-row" data-row-id="{{mrUniqueId}}">
+    <div class="cartridge-node-title">
+        <div class='node-icons' style="margin-left:{{offsetwidth}}px";>
+            <i class="icn node-toggle-icon"></i>
+            {{#ifCond editable '===' true}}
+            <input class="node-select" {{#ifCond isDeleteEnabled '!==' 'Y'}}disabled=true{{/ifCond}} type="checkbox"> {{/ifCond}}
+            <i class="{{icon}} node-icon"></i>
+        </div>
+        <div class='node-key'>
+            {{#keySummary key}}{{/keySummary}}
+        </div>
+    </div>
+    <div class="cartridge-row-data">
+        {{#summary summary}}{{/summary}}
+    </div>
+    <div class="col-md-2 col-xs-3 cartridge-node-actions">
+        {{#ifCond editable '===' true}}
+
+        <div  menu_Item_name ="Add" title={{i18n "form" 'Add'}} class="col-xs-4 btn-group {{#unless menuItems}}action-hide{{/unless}}">
+            <button type="button" class="btn btn-default dropdown-toggle tree-dropdown-add-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icn icn-plus"></i><span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              {{#each menuItems}}
+              {{#ifCond ../menuItems.length "!==" 1}}
+              <li class="dropdown-header dropdown-header-{{id}}">{{name}}</li>
+              {{/ifCond}}
+              {{#ifCond behavior "===" "REPORT"}}
+              <li><a menu_Item_name="Add_{{id}}"cartridge-id="{{id}}" item="{{item}}" type='report' visualization={{sectionType}} sectionId="{{sectionId}}" filterFK="{{filterFK}}" filterPK="{{filterPK}}">&nbsp;&nbsp;{{i18n  "form" 'Add'}} {{name}}</a></li>
+              {{/ifCond}}
+              {{#ifCond behavior "===" "SECTIONTYPE"}}
+              <li><a menu_Item_name="Add_{{id}}"cartridge-id="{{id}}" type='sectionType' visualization={{sectionType}} sectionId="{{sectionId}}" filterFK="{{filterFK}}" filterPK="{{filterPK}}">&nbsp;&nbsp;{{i18n  "form" 'Add'}} {{name}}</a></li>
+              {{/ifCond}}
+              {{#ifCond behavior "===" "MANUAL_ENTRY"}}
+              <li><a menu_Item_name="Add_{{id}}"cartridge-id="{{id}}" type='manual'>&nbsp;&nbsp;{{i18n  "form" 'Add'}} {{name}}</a></li>
+              {{/ifCond}}
+              {{#ifCond behavior "===" "IMPORT"}} {{#each imports}}
+              <li><a menu_Item_name="Add_{{../id}}_{{this}}" cartridge-id="{{../id}}" report-name="{{this}}" type='import'>&nbsp;&nbsp;{{i18n  "form" 'ChooseFrom'}} {{this}}</a></li>
+              {{/each}} {{/ifCond}} {{/each}}
+            </ul>
+        </div>
+         <button  menu_Item_name="Edit" type="button" title={{i18n "form" 'Edit'}} class="btn btn-default col-xs-4 edit-node"><i class="icn icn-pencil"></i></button>
+        {{#ifCond isDeleteEnabled '===' 'Y'}}
+        <button menu_Item_name ="Delete" type="button" title={{i18n "form" 'Delete'}} class="btn btn-default col-xs-4 delete-node delete-tree-row"><i class="icn icn-trash"></i></button>
+        {{/ifCond}}
+        {{else}}
+        <button type="button"  menu_Item_name="Edit" class="btn btn-default edit-node"><i class="icn icn-window-view"></i></button>
+        {{/ifCond}}
+    </div>
+   </div>
+</div>
+<div class='children'></div>

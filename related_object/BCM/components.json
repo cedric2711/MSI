@@ -1,0 +1,7 @@
+[
+{
+        "id": "TREE_BCM",
+        "type": "custom",
+        "path": "modules/BCM/forms/bcmJS/views/treeView"
+}
+]
