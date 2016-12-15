@@ -208,11 +208,13 @@ define(['libs', 'utils', 'i18n!nls/formLabels', 'forms/views/treeNodeView', 'hbs
                     if (ob.type === "section") {
                         if (ob.label.indexOf("Grid") != -1) {
                             if (ob.description != undefined) {
-                                F.gridRelatedObject = JSON.parse(ob.description);
+                                F.gridRelatedObject = (F.gridRelatedObject == undefined) ? JSON.parse(ob.description) : F.gridRelatedObject;
                                 for (var i = 0; i < F.gridRelatedObject.length; i++) {
-                                    menuItems.push(F.gridRelatedObject[i]);
+                                    if (F.gridRelatedObject[i].displayGrid) {
+                                        menuItems.push(F.gridRelatedObject[i]);
+                                    }
                                     var menuLinks = F.formData.multirows[F.gridRelatedObject[i].id].gridConfigs["import-source"];
-                                    if (menuLinks.length > 0) {
+                                    if (menuLinks.length > 0 && F.gridRelatedObject[i].displayMenu) {
                                         for (var j = 0; j < menuLinks.length; j++) {
                                             menuItems.push({
                                                 id: F.gridRelatedObject[i].id,
