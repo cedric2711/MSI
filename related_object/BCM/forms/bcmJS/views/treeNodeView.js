@@ -245,12 +245,35 @@ define(['libs', 'utils', 'i18n!nls/formLabels', 'forms/views/treeNodeView', 'hbs
                         }
                     }
                 });
-                /*
-                      //Common JSON defined at the JS level
-                      for (var i = 0; i < F.relatedGrids.length; i++) {
-                          menuItems.push(F.relatedGrids[i]);
-                      }
-                      */
+
+                //Common JSON defined at the JS level
+
+                for (var i = 0; i < F.relatedGrids.length; i++) {
+                    if (F.relatedGrids[i].displayGrid) {
+                        menuItems.push(F.relatedGrids[i]);
+                    }
+                    var menuLinks = F.formData.multirows[F.relatedGrids[i].id].gridConfigs["import-source"];
+                    if (menuLinks.length > 0 && F.relatedGrids[i].displayMenu) {
+                        for (var j = 0; j < menuLinks.length; j++) {
+                            menuItems.push({
+                                id: F.relatedGrids[i].id,
+                                name: menuLinks[j]['item-type'], //F[gridID].getLabel();
+                                sectionId: F.relatedGrids[i].id,
+                                sectionType: menuLinks[j]['data-source-type'],
+                                imports: [],
+                                item: menuLinks[j]['item-type'],
+                                filterFK: F.relatedGrids[i].filterFK,
+                                filterPK: F.relatedGrids[i].filterPK,
+                                behavior: menuLinks[j]['data-source-type']
+                            });
+                        }
+                    }
+                }
+                /*  for (var i = 0; i < F.relatedGrids.length; i++) {
+                      menuItems.push(F.relatedGrids[i]);
+                  }
+                  */
+
 
                 if (this.model.requiredValNotSet === undefined) {
                     var onlyRequiredRows = {};
