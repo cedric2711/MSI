@@ -243,9 +243,12 @@ define(['libs', 'utils', 'i18n!nls/formLabels', 'forms/views/treeNodeView', 'hbs
                         }
                     }
                 });
-                for (var i = 0; i < F.relatedGrids.length; i++) {
-                    menuItems.push(F.relatedGrids[i]);
-                }
+                /*
+                      //Common JSON defined at the JS level
+                      for (var i = 0; i < F.relatedGrids.length; i++) {
+                          menuItems.push(F.relatedGrids[i]);
+                      }
+                      */
 
                 if (this.model.requiredValNotSet === undefined) {
                     var onlyRequiredRows = {};

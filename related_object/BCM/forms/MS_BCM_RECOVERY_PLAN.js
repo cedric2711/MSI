@@ -24,6 +24,7 @@ define(['modules/BCM/forms/MS_BCM_STAGE_INDICATOR','modules/BCM/forms/MS_BCM_COM
     F.NEXT_REVIEW_DATE.onChange(nextReviewDateCheckPast);
     F.TIER_VALUE.onChange(fnTierValue);
     F.PLAN_TYPE_PARAM_ID.onChange(fnplantype);
+	F.SEC.afterEditViewRendered(fnAfterRowRender);
     var templateId = null;
     var templateName = null;
     var isFormOnLoad = false;
@@ -115,7 +116,6 @@ define(['modules/BCM/forms/MS_BCM_STAGE_INDICATOR','modules/BCM/forms/MS_BCM_COM
 			F.PLAN_FOOTER.hide();
 			F.getObject('MSAI_489').show();
 			F.getObject('MSAI_628').hide();
-			F.SEC.hide();
 			F.TSK.hide();
 			F.DPN.hide();
 			F.ASG.hide();
@@ -579,4 +579,8 @@ define(['modules/BCM/forms/MS_BCM_STAGE_INDICATOR','modules/BCM/forms/MS_BCM_COM
             }, delayTime);
         }
     }
+	
+	function fnAfterRowRender(row){
+		F.SECTION_ID_SEC.write(F.SEC.getRowId(row),row);
+	}
 })
