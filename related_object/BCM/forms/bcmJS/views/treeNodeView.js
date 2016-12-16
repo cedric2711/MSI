@@ -338,36 +338,39 @@ define(['libs', 'utils', 'i18n!nls/formLabels', 'forms/views/treeNodeView', 'hbs
                         "sectionType": sectionType,
                         "filterFK": filterFK,
                         "filterPK": filterPK,
-                        "parentView": this
+                        "parentView": this,
+                        "reportName": e.target.getAttribute('item')
                     }
                     if (addType == 'sectionType') {
                         this.trigger('customEdit', F.windowInfo);
-                        if (sectionType == 'grid') {
-                            F[F.windowInfo.ID].multirow.listenTo(F[F.windowInfo.ID].multirow, 'afterAddRow', function(row) {
-                                var filterFK = F.windowInfo.filterFK.split(',');
-                                var filterPK = F.windowInfo.filterPK.split(',');
-                                for (var j = 0; j < filterPK.length; j++) {
-                                    F[filterFK[j]].write(F[filterPK[j]].read(F.currentTreeRow), row);
-                                }
-                                //commented code is operation for filteration
-                                setTimeout(function() {
-                                    var filterFK = F.windowInfo.filterFK.split(',');
-                                    var filterPK = F.windowInfo.filterPK.split(',');
-                                    var filterPKValue = [];
-                                    for (var i = 0; i < filterFK.length; i++) {
-                                        filterPKValue.push(F[filterPK[i]].read(F.currentTreeRow));
-                                    }
-                                    var filterFKField = [];
-                                    for (var i = 0; i < filterPK.length; i++) {
-                                        filterFKField.push(F[filterFK[i]]);
-                                    }
-                                    F[F.windowInfo.ID].filter(filterFKField, filterPKValue, '=');
-                                }, 300);
+                        this.registerGridListeners(sectionType);
+                        /*  if (sectionType == 'grid') {
+                              F[F.windowInfo.ID].multirow.listenTo(F[F.windowInfo.ID].multirow, 'afterAddRow', function(row) {
+                                  var filterFK = F.windowInfo.filterFK.split(',');
+                                  var filterPK = F.windowInfo.filterPK.split(',');
+                                  for (var j = 0; j < filterPK.length; j++) {
+                                      F[filterFK[j]].write(F[filterPK[j]].read(F.currentTreeRow), row);
+                                  }
+                                  //commented code is operation for filteration
+                                  setTimeout(function() {
+                                      var filterFK = F.windowInfo.filterFK.split(',');
+                                      var filterPK = F.windowInfo.filterPK.split(',');
+                                      var filterPKValue = [];
+                                      for (var i = 0; i < filterFK.length; i++) {
+                                          filterPKValue.push(F[filterPK[i]].read(F.currentTreeRow));
+                                      }
+                                      var filterFKField = [];
+                                      for (var i = 0; i < filterPK.length; i++) {
+                                          filterFKField.push(F[filterFK[i]]);
+                                      }
+                                      F[F.windowInfo.ID].filter(filterFKField, filterPKValue, '=');
+                                  }, 300);
 
-                                F.windowInfo.parentView.postReportImportOperation();
-                                return true;
-                            });
-                        }
+                                  F.windowInfo.parentView.postReportImportOperation();
+                                  return true;
+                              });
+                          }
+                          */
 
                     } else if (addType == 'report') {
                         var reportObject = F.formData.multirows[F.windowInfo.ID].gridConfigs['import-source'];
@@ -381,26 +384,76 @@ define(['libs', 'utils', 'i18n!nls/formLabels', 'forms/views/treeNodeView', 'hbs
                                 });
                             }
                         }
-
-
-                        F[id].multirow.listenTo(F[id].multirow, 'afterImport', function(addedObject) {
-                            var filterFK = F.windowInfo.filterFK.split(',');
-                            var filterPK = F.windowInfo.filterPK.split(',');
-                            var newRecord = addedObject['import-data'];
-                            for (var i = 0; i < newRecord.length; i++) {
-                                var rowNo = F[F.windowInfo.ID].getRowNumber(newRecord[i].rowId);
-                                for (var j = 0; j < filterPK.length; j++) {
-                                    F[filterFK[j]].write(F[filterPK[j]].read(F.currentTreeRow), rowNo);
-                                }
-                            }
-                            F.windowInfo.parentView.postReportImportOperation();
-                            return true;
-                        });
+                        this.registerGridListeners(sectionType);
+                        /*
+                                                F[id].multirow.listenTo(F[id].multirow, 'afterImport', function(addedObject) {
+                                                    var filterFK = F.windowInfo.filterFK.split(',');
+                                                    var filterPK = F.windowInfo.filterPK.split(',');
+                                                    var newRecord = addedObject['import-data'];
+                                                    for (var i = 0; i < newRecord.length; i++) {
+                                                        var rowNo = F[F.windowInfo.ID].getRowNumber(newRecord[i].rowId);
+                                                        for (var j = 0; j < filterPK.length; j++) {
+                                                            F[filterFK[j]].write(F[filterPK[j]].read(F.currentTreeRow), rowNo);
+                                                        }
+                                                    }
+                                                    F.windowInfo.parentView.postReportImportOperation();
+                                                    return true;
+                                                });
+                                                */
                     }
                 }
 
             },
             postReportImportOperation: function() {
+
+            },
+            registerGridListeners: function(sectionType) {
+                if (sectionType == 'grid') {
+                    F[F.windowInfo.ID].multirow.listenTo(F[F.windowInfo.ID].multirow, 'afterAddRow', function(row) {
+                        var filterFK = F.windowInfo.filterFK.split(',');
+                        var filterPK = F.windowInfo.filterPK.split(',');
+                        for (var j = 0; j < filterPK.length; j++) {
+                            F[filterFK[j]].write(F[filterPK[j]].read(F.currentTreeRow), row);
+                        }
+                        //commented code is operation for filteration
+                        setTimeout(function() {
+                            var filterFK = F.windowInfo.filterFK.split(',');
+                            var filterPK = F.windowInfo.filterPK.split(',');
+                            var filterPKValue = [];
+                            for (var i = 0; i < filterFK.length; i++) {
+                                filterPKValue.push(F[filterPK[i]].read(F.currentTreeRow));
+                            }
+                            var filterFKField = [];
+                            for (var i = 0; i < filterPK.length; i++) {
+                                filterFKField.push(F[filterFK[i]]);
+                            }
+                            F[F.windowInfo.ID].filter(filterFKField, filterPKValue, '=');
+                        }, 300);
+
+                        F.windowInfo.parentView.postReportImportOperation();
+                        return true;
+                    });
+                }
+                F[F.windowInfo.ID].multirow.listenTo(F[F.windowInfo.ID].multirow, 'afterImport', function(addedObject) {
+                    var filterFK = F.windowInfo.filterFK.split(',');
+                    var filterPK = F.windowInfo.filterPK.split(',');
+                    var newRecord = addedObject['import-data'];
+                    for (var i = 0; i < newRecord.length; i++) {
+                        var rowNo = F[F.windowInfo.ID].getRowNumber(newRecord[i].rowId);
+                        for (var j = 0; j < filterPK.length; j++) {
+                            F[filterFK[j]].write(F[filterPK[j]].read(F.currentTreeRow), rowNo);
+                        }
+                    }
+                    if (F.windowInfo.sectionType != 'grid') {
+                        F[F.windowInfo.ID].multirow.backgrid.collection.fullCollection.reset(F[F.windowInfo.ID].multirow.backgrid.shadowCollection.models, {
+                            reindex: false
+                        });
+                    }
+                    F.windowInfo.parentView.postReportImportOperation();
+                    return true;
+                });
+
+
 
             },
             customEdit: function(info) {
